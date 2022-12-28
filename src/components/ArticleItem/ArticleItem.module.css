@@ -1,0 +1,52 @@
+.articleItem {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    margin-bottom: 30px;
+}
+
+.articleImage {
+    width: 30%;
+}
+
+
+.articleContent {
+    width: 45%;
+    align-items: baseline;
+    margin-left: 40px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.articleContent .title {
+    font-size: 25px;
+    font-weight: 600;
+}
+
+.articleContent .author {
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.articleContent .tag {
+    border: 2px solid rgb(117, 50, 50);
+    padding: 5px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.button {
+    border: 2px solid rgb(117, 50, 50);
+    padding: 5px 10px;
+    border-radius: 10px;
+    background-color: inherit; 
+    margin: 0px 5px;
+    color:  rgb(117, 50, 50);
+    font-weight: 600;
+    cursor: pointer;
+}
+
+
+

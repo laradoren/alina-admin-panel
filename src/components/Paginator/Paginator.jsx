@@ -1,9 +1,9 @@
 import css from "./Paginator.module.css";
 
-function Paginator() {
+function Paginator({pages}) {
   return (
     <div className={css.paginator}>
-      Paginator
+      {[...Array(pages).keys()].map(page => <div key={page} className={css.cell}>{page+1}</div>)}
     </div>
   );
 }

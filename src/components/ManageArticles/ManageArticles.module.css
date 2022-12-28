@@ -1,0 +1,11 @@
+.manageArticles {
+    padding: 10px 10px;
+}
+
+.filter {
+    margin: 10px 0;
+}
+
+.filter>label {
+    margin-right: 5px;
+}
