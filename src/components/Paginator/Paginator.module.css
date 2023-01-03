@@ -4,7 +4,14 @@
 }
 
 .cell {
+    padding: 5px 10px;
+    margin: 10px 5px;
+    cursor: pointer;
+}
+
+.activeCell {
     border: 1px solid rgb(117, 50, 50);
     padding: 5px 10px;
     margin: 10px 5px;
+    cursor: pointer;
 }

@@ -1,12 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import { ArticlesApi } from "../api/ArticlesApi";
 import GlobalContext from "./GlobalContext";
-import image from "../components/photo_2021-02-03_21-42-49.jpg";
 import { DATA } from "../constants";
-
-const articles = [
-  { id: "1111", title: "Hello", tag: "woman", author: "nine", image: image },
-];
 
 function articlesReducer(state, { type, payload }) {
   switch (type) {
@@ -15,46 +10,76 @@ function articlesReducer(state, { type, payload }) {
       return [...state, payload];
     case "edit":
       return [
-        ...state.map((item) => (item.id === payload.id ? payload : item)),
+        ...state.map((item) => (item._id === payload._id ? payload : item)),
       ];
     case "delete":
-        console.log(payload);
-        console.log(state.filter((item) => item.id !== payload.id));
-      return [...state.filter((item) => item.id !== payload.id)];
+      return [...state.filter((item) => item._id !== payload._id)];
+    case "set":
+      return [...payload];
     default:
       throw new Error("Unknow type for ArticlesReducer");
   }
 }
 
-const init = () => {
-  return articles;
-};
-
 const ContextWrapper = ({ children }) => {
-  const [articles, dispatchCallArticle] = useReducer(articlesReducer, [], init);
-  const [formMode, setFormMode] = useState(DATA.FORM_MODE.create);
+  const [articles, dispatchCallArticle] = useReducer(articlesReducer, []);
+  const [pageInfo, setPageInfo] = useState({
+    index: 0,
+    total: 0,
+  });
+  const [modalOption, setModalOption] = useState({
+    isOpen: false,
+    type: DATA.FORM_MODE.create,
+  });
   const [activeArticle, setActiveArticle] = useState({
     title: "",
     image: "",
     tag: "",
     author: "",
   });
-
+  const [currentFilters, setCurrentFilters] = useState({
+    filter: {},
+    sorter: {},
+    search: "",
+  });
+  const [isLoading, setLoading] = useState(false);
 
   const createArticle = (dtoIn) => {
-    //call api
-    dispatchCallArticle({type: "create", payload: dtoIn});
-  }
+    ArticlesApi.createArticle(dtoIn);
+    dispatchCallArticle({ type: "create", payload: dtoIn });
+  };
 
   const deleteArticle = (dtoIn) => {
-    dispatchCallArticle({type: "delete", payload: dtoIn});
-  }
+    ArticlesApi.deleteArticle(dtoIn._id);
+    dispatchCallArticle({ type: "delete", payload: dtoIn });
+  };
 
   const updateArticle = (dtoIn) => {
-    dispatchCallArticle({type: "edit", payload: dtoIn});
-  }
+    ArticlesApi.updateArticle(dtoIn);
+    dispatchCallArticle({ type: "edit", payload: dtoIn });
+  };
 
-  useEffect(() => {}, []);
+  const loadArticles = (query = null, page = null) => {
+    if(isLoading) return;
+    setLoading(true);
+    page && setPageInfo((prev) => ({ ...prev, index: page }));
+    query && setCurrentFilters(query);
+
+    ArticlesApi.getAllArticles(query, page).then((res) => {
+      dispatchCallArticle({ type: "set", payload: res.data.articles });
+      setPageInfo((prev) => ({ ...prev, total: res.data.total }));
+      setLoading(false);
+    });
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    ArticlesApi.getAllArticles().then((res) => {
+      dispatchCallArticle({ type: "set", payload: res.data.articles });
+      setPageInfo((prev) => ({ ...prev, total: res.data.total }));
+      setLoading(false);
+    });
+  }, []);
 
   return (
     <GlobalContext.Provider
@@ -65,8 +90,11 @@ const ContextWrapper = ({ children }) => {
         createArticle,
         deleteArticle,
         updateArticle,
-        formMode,
-        setFormMode
+        modalOption,
+        setModalOption,
+        pageInfo,
+        loadArticles,
+        isLoading
       }}
     >
       {children}

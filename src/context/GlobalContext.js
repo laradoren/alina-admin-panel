@@ -1,15 +1,18 @@
-import React from 'react';
-import { DATA } from '../constants';
+import React from "react";
+import { DATA } from "../constants";
 
 const GlobalContext = React.createContext({
-    articles: [],
-    activeArticle: {},
-    setActiveArticle: (article) => {},
-    createArticle: (dtoIn) => {},
-    deleteArticle: (dtoIn) => {},
-    updateArticle: (dtoIn) => {},
-    formMode: DATA.FORM_MODE.create,
-    setFormMode: (mode) => {}
+  articles: [],
+  activeArticle: {},
+  setActiveArticle: (article) => {},
+  createArticle: (dtoIn) => {},
+  deleteArticle: (dtoIn) => {},
+  updateArticle: (dtoIn) => {},
+  modalOption: { isOpen: false, type: DATA.FORM_MODE.create },
+  setModalOptions: ({isOpen, type}) => {},
+  pageInfo: {},
+  loadArticles: (query, page) => {},
+  isLoading: false
 });
 
 export default GlobalContext;

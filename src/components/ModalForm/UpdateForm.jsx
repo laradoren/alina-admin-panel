@@ -1,32 +1,34 @@
 import { useContext } from "react";
 import GlobalContext from "../../context/GlobalContext";
-import css from "./ArticleForm.module.css";
+import css from "./ModalForm.module.css";
 import { Formik, Field, Form } from "formik";
 
-function CreateForm() {
-  let { createArticle } = useContext(GlobalContext);
+function UpdateForm() {
+  let { activeArticle, updateArticle, setModalOption } = useContext(GlobalContext);
 
   const onSubmitForm = (values, { resetForm }) => {
     if (values.title && values.image && values.tag && values.author) {
-      createArticle(values);
+      updateArticle(values);
       resetForm();
     } else {
       alert("Please fill all fields!");
     }
   };
 
+  const onResetForm = () => {
+    setModalOption(prev => {
+      return {...prev, isOpen: false}
+    });
+  };
+
   return (
     <Formik
-      initialValues={{
-        title: "",
-        image: "",
-        tag: "",
-        author: "",
-      }}
+      initialValues={activeArticle}
       onSubmit={onSubmitForm}
+      onReset={onResetForm}
     >
       <Form className={css.form}>
-        <label className={css.title}>Create article</label>
+        <label className={css.title}>Update article</label>
         <label>Title</label>
         <Field name="title" id="title" />
         <label>Image</label>
@@ -37,7 +39,7 @@ function CreateForm() {
         <Field name="author" id="author" />
         <div className={css.actions}>
           <button type="submit" className={css.button}>
-            Create
+            Update
           </button>
           <button type="reset" className={css.button}>
             Cancel
@@ -48,4 +50,4 @@ function CreateForm() {
   );
 }
 
-export default CreateForm;
+export default UpdateForm;
