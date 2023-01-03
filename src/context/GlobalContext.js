@@ -12,7 +12,10 @@ const GlobalContext = React.createContext({
   setModalOptions: ({isOpen, type}) => {},
   pageInfo: {},
   loadArticles: (query, page) => {},
-  isLoading: false
+  isLoading: false,
+  currentFilters: {},
+  setCurrentFilters: (query) => {},
+  closeModalWindow: () => {}
 });
 
 export default GlobalContext;

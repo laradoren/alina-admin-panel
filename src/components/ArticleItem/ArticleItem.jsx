@@ -13,7 +13,7 @@ function ArticleItem({ article }) {
     <div className={css.articleItem}>
       <img
         className={css.articleImage}
-        src={article.image}
+        src={article.image || DATA.DEFAULT_IMAGE}
         alt={article.title}
       />
       <div className={css.articleContent}>

@@ -19,9 +19,9 @@ function AdminPanel() {
       <div className={css.loading}>Loading...</div>
     ) : (
       <div className={css.listArticles}>
-        {articles.map((article) => (
+        {articles.length ? articles.map((article) => (
           <ArticleItem article={article} key={article.title} />
-        ))}
+        )) : <div className={css.nothing}>{"Sorry, there is nothing("}</div>}
       </div>
     );
   };
@@ -36,7 +36,7 @@ function AdminPanel() {
         <button onClick={() => openModalForm(DATA.FORM_MODE.create)}>
           Create Article
         </button>
-        <Paginator />
+        {articles.length ? <Paginator /> : <></>}
       </div>
       {getArticles()}
     </div>

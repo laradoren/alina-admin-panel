@@ -4,7 +4,7 @@ import css from "./ModalForm.module.css";
 import { Formik, Field, Form } from "formik";
 
 function UpdateForm() {
-  let { activeArticle, updateArticle, setModalOption } = useContext(GlobalContext);
+  let { activeArticle, updateArticle, closeModalWindow } = useContext(GlobalContext);
 
   const onSubmitForm = (values, { resetForm }) => {
     if (values.title && values.image && values.tag && values.author) {
@@ -15,17 +15,11 @@ function UpdateForm() {
     }
   };
 
-  const onResetForm = () => {
-    setModalOption(prev => {
-      return {...prev, isOpen: false}
-    });
-  };
-
   return (
     <Formik
       initialValues={activeArticle}
       onSubmit={onSubmitForm}
-      onReset={onResetForm}
+      onReset={closeModalWindow}
     >
       <Form className={css.form}>
         <label className={css.title}>Update article</label>

@@ -4,34 +4,29 @@ import GlobalContext from "../../context/GlobalContext";
 import css from "./ModalForm.module.css";
 
 function ManageArticles() {
-  let { loadArticles, setModalOption } = useContext(GlobalContext);
-
-  const onResetForm = () => {
-    setModalOption((prev) => {
-      return { ...prev, isOpen: false };
-    });
-  };
+  let { loadArticles, closeModalWindow, currentFilters } = useContext(GlobalContext);
 
   const onSubmitForm = (values) => {
-    console.log(values);
+    loadArticles(values, "0");
+    closeModalWindow()
   };
 
   return (
-    <Formik onReset={onResetForm} onSubmit={onSubmitForm} initialValues={{}}>
+    <Formik onReset={closeModalWindow} onSubmit={onSubmitForm} initialValues={currentFilters}>
       <Form className={css.form}>
         <label className={css.title}>Filter articles</label>
 
         <label>Sort by</label>
         <div>
-          <Field as="select" name="sorter">
+          <Field as="select" name="sortBy">
             <option value="tag">Tag</option>
             <option value="title">Title</option>
             <option value="author">Author</option>
           </Field>
 
-          <Field as="select" name="order">
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
+          <Field as="select" name="sortOrder">
+            <option value="1">Ascending</option>
+            <option value="-1">Descending</option>
           </Field>
         </div>
 
@@ -39,7 +34,7 @@ function ManageArticles() {
         <Field type="text" name="search" id="search" />
 
         <label>Filter by tag</label>
-        <Field type="text" name="tagd" id="tagd" />
+        <Field type="text" name="filter" id="filter" />
 
         <div className={css.actions}>
           <button type="submit" className={css.button}>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { prepareUri } from "../helpers/helpers";
 
 const OPTIONS = {
   BASE_URI: "http://localhost:4000/api/articles/",
@@ -6,26 +7,8 @@ const OPTIONS = {
 
 export const ArticlesApi = {
   async getAllArticles(query = null, page = null) {
-    let url = OPTIONS.BASE_URI;
-    if(page || query) {
-      url += "?";
-    }
-    if(page) {
-      url += `index=${page}&`;
-    }
-    if(query) {
-      if(query.filter) {
-        url += `filter=${query.filter}&`;
-      }
-      if(query.search) {
-        url += `search=${query.search}&`;
-      }
-      if(query.sorter) {
-        url += "sortBy=" + Object.keys(query.sorter)[0]+"&";
-        url += "sortOrder=" + query.sorter;
-        
-      }
-    }
+    let url = prepareUri(OPTIONS.BASE_URI, {...query, index: page});
+
     return await axios({
       method: "get",
       url: url
@@ -62,3 +45,5 @@ export const ArticlesApi = {
     });
   },
 };
+
+

@@ -38,11 +38,21 @@ const ContextWrapper = ({ children }) => {
     author: "",
   });
   const [currentFilters, setCurrentFilters] = useState({
-    filter: {},
-    sorter: {},
+    filter: "",
+    sortBy: "title",
+    sortOrder: "1",
     search: "",
   });
   const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    ArticlesApi.getAllArticles(currentFilters, pageInfo.index).then((res) => {
+      dispatchCallArticle({ type: "set", payload: res.data.articles });
+      setPageInfo((prev) => ({ ...prev, total: res.data.total }));
+      setLoading(false);
+    });
+  }, []);
 
   const createArticle = (dtoIn) => {
     ArticlesApi.createArticle(dtoIn);
@@ -72,14 +82,12 @@ const ContextWrapper = ({ children }) => {
     });
   };
 
-  useEffect(() => {
-    setLoading(true);
-    ArticlesApi.getAllArticles().then((res) => {
-      dispatchCallArticle({ type: "set", payload: res.data.articles });
-      setPageInfo((prev) => ({ ...prev, total: res.data.total }));
-      setLoading(false);
+  const closeModalWindow = () => {
+    setModalOption((prev) => {
+      return { ...prev, isOpen: false };
     });
-  }, []);
+  }
+
 
   return (
     <GlobalContext.Provider
@@ -94,7 +102,10 @@ const ContextWrapper = ({ children }) => {
         setModalOption,
         pageInfo,
         loadArticles,
-        isLoading
+        isLoading,
+        currentFilters,
+        setCurrentFilters,
+        closeModalWindow
       }}
     >
       {children}
