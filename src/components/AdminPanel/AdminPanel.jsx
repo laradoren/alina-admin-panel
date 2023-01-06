@@ -7,7 +7,7 @@ import ModalForm from "../ModalForm/ModalForm";
 import { DATA } from "../../constants";
 
 function AdminPanel() {
-  const { articles, modalOption, setModalOption, isLoading } =
+  const { articles, modalOption, setModalOption, isLoading, currentUser, logoutUser } =
     useContext(GlobalContext);
 
   const openModalForm = (type) => {
@@ -30,6 +30,10 @@ function AdminPanel() {
     <div className={css.adminPanel}>
       {modalOption.isOpen && <ModalForm />}
       <div className={css.manageArticles}>
+        Hi, {currentUser.login}
+        <button onClick={logoutUser}>
+          Log Out
+        </button>
         <button onClick={() => openModalForm(DATA.FORM_MODE.manage)}>
           Filter Articles
         </button>

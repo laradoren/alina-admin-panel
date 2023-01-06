@@ -16,25 +16,25 @@ function ManageArticles() {
       <Form className={css.form}>
         <label className={css.title}>Filter articles</label>
 
-        <label>Sort by</label>
+        <label className={css.label}>Sort by</label>
         <div>
-          <Field as="select" name="sortBy">
+          <Field as="select" name="sortBy" className={css.input} >
             <option value="tag">Tag</option>
             <option value="title">Title</option>
             <option value="author">Author</option>
           </Field>
 
-          <Field as="select" name="sortOrder">
+          <Field as="select" name="sortOrder" className={css.input} >
             <option value="1">Ascending</option>
             <option value="-1">Descending</option>
           </Field>
         </div>
 
-        <label>Search in title or author name</label>
-        <Field type="text" name="search" id="search" />
+        <label className={css.label}>Search in title or author name</label>
+        <Field type="text" name="search" id="search" className={css.input} />
 
-        <label>Filter by tag</label>
-        <Field type="text" name="filter" id="filter" />
+        <label className={css.label}>Filter by tag</label>
+        <Field type="text" name="filter" id="filter" className={css.input} />
 
         <div className={css.actions}>
           <button type="submit" className={css.button}>

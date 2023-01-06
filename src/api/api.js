@@ -3,15 +3,16 @@ import { prepareUri } from "../helpers/helpers";
 
 const OPTIONS = {
   BASE_URI: "http://localhost:4000/api/articles/",
+  BASE_URI_USER: "http://localhost:4000/api/user/",
 };
 
-export const ArticlesApi = {
+export const articlesApi = {
   async getAllArticles(query = null, page = null) {
-    let url = prepareUri(OPTIONS.BASE_URI, {...query, index: page});
+    let url = prepareUri(OPTIONS.BASE_URI, { ...query, index: page });
 
     return await axios({
       method: "get",
-      url: url
+      url: url,
     });
   },
   getOneArticle(id) {
@@ -46,4 +47,24 @@ export const ArticlesApi = {
   },
 };
 
+export const userApi = {
+  async login(data) {
+    return await axios({
+      method: "post",
+      url: OPTIONS.BASE_URI_USER + "login",
+      data: {
+        ...data,
+      },
+    });
+  },
 
+  async register(data) {
+    return await axios({
+      method: "post",
+      url: OPTIONS.BASE_URI_USER + "register",
+      data: {
+        ...data,
+      },
+    });
+  },
+};

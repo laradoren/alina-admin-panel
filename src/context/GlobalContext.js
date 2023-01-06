@@ -15,7 +15,11 @@ const GlobalContext = React.createContext({
   isLoading: false,
   currentFilters: {},
   setCurrentFilters: (query) => {},
-  closeModalWindow: () => {}
+  closeModalWindow: () => {},
+  currentUser: {},
+  loginUser: (user) => {},
+  registerUser: (user) => {},
+  logoutUser: () => {}
 });
 
 export default GlobalContext;

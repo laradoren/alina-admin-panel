@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useState } from "react";
-import { ArticlesApi } from "../api/ArticlesApi";
+import { articlesApi, userApi } from "../api/api";
 import GlobalContext from "./GlobalContext";
 import { DATA } from "../constants";
 
@@ -43,29 +43,32 @@ const ContextWrapper = ({ children }) => {
     sortOrder: "1",
     search: "",
   });
+  const [currentUser, setCurrentUser] = useState({
+    login: "",
+    token: "",
+  });
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    ArticlesApi.getAllArticles(currentFilters, pageInfo.index).then((res) => {
-      dispatchCallArticle({ type: "set", payload: res.data.articles });
-      setPageInfo((prev) => ({ ...prev, total: res.data.total }));
-      setLoading(false);
-    });
+    const user = localStorage.getItem("user");
+    if(JSON.parse(user)) {
+      setCurrentUser(JSON.parse(user));
+      loadArticles(currentFilters, pageInfo.index);
+    }
   }, []);
 
   const createArticle = (dtoIn) => {
-    ArticlesApi.createArticle(dtoIn);
+    articlesApi.createArticle(dtoIn);
     dispatchCallArticle({ type: "create", payload: dtoIn });
   };
 
   const deleteArticle = (dtoIn) => {
-    ArticlesApi.deleteArticle(dtoIn._id);
+    articlesApi.deleteArticle(dtoIn._id);
     dispatchCallArticle({ type: "delete", payload: dtoIn });
   };
 
   const updateArticle = (dtoIn) => {
-    ArticlesApi.updateArticle(dtoIn);
+    articlesApi.updateArticle(dtoIn);
     dispatchCallArticle({ type: "edit", payload: dtoIn });
   };
 
@@ -74,8 +77,7 @@ const ContextWrapper = ({ children }) => {
     setLoading(true);
     page && setPageInfo((prev) => ({ ...prev, index: page }));
     query && setCurrentFilters(query);
-
-    ArticlesApi.getAllArticles(query, page).then((res) => {
+    articlesApi.getAllArticles(query, page).then((res) => {
       dispatchCallArticle({ type: "set", payload: res.data.articles });
       setPageInfo((prev) => ({ ...prev, total: res.data.total }));
       setLoading(false);
@@ -86,6 +88,34 @@ const ContextWrapper = ({ children }) => {
     setModalOption((prev) => {
       return { ...prev, isOpen: false };
     });
+  }
+
+  const loginUser = (userData) => {
+    userApi.login(userData).then(
+      res => {
+        setCurrentUser(res.data);
+        localStorage.setItem("user", JSON.stringify({token: res.data.token, login: res.data.login}));
+      }
+    ).catch(e => alert(e.response.data));
+    loadArticles(currentFilters, pageInfo.index);
+  }
+
+  const registerUser = (userData) => {
+    userApi.register(userData).then(
+      res => {
+        setCurrentUser(res.data);
+        localStorage.setItem("user", JSON.stringify({token: res.data.token, login: res.data.login}));
+      }
+    ).catch(e => alert(e.response.data));
+    loadArticles(currentFilters, pageInfo.index);
+  }
+
+  const logoutUser = () => {
+    setCurrentUser({
+      token: "",
+      login: ""
+    });
+    localStorage.removeItem("user");
   }
 
 
@@ -105,7 +135,11 @@ const ContextWrapper = ({ children }) => {
         isLoading,
         currentFilters,
         setCurrentFilters,
-        closeModalWindow
+        closeModalWindow,
+        currentUser, 
+        loginUser,
+        registerUser,
+        logoutUser
       }}
     >
       {children}

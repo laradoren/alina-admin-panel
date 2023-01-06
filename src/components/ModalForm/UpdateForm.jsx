@@ -23,14 +23,14 @@ function UpdateForm() {
     >
       <Form className={css.form}>
         <label className={css.title}>Update article</label>
-        <label>Title</label>
-        <Field name="title" id="title" />
-        <label>Image</label>
-        <Field name="image" id="image" />
-        <label>Tag</label>
-        <Field name="tag" id="tag" />
-        <label>Author</label>
-        <Field name="author" id="author" />
+        <label className={css.label}>Title</label>
+        <Field name="title" id="title" className={css.input} />
+        <label className={css.label}>Image</label>
+        <Field name="image" id="image" className={css.input} />
+        <label className={css.label}>Tag</label>
+        <Field name="tag" id="tag" className={css.input} />
+        <label className={css.label}>Author</label>
+        <Field name="author" id="author" className={css.input} />
         <div className={css.actions}>
           <button type="submit" className={css.button}>
             Update

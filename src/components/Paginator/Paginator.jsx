@@ -7,8 +7,6 @@ function Paginator() {
   let { pageInfo, loadArticles, currentFilters } = useContext(GlobalContext);
   let pages = Math.ceil(pageInfo.total/DATA.PAGE_SIZE) || 1;
 
-  console.log(pageInfo.total);
-
   return (
     <div className={css.paginator}>
       {[...Array(pages).keys()].map(page => <div key={page} onClick={() => loadArticles(currentFilters, page.toString())} className={+pageInfo.index === page ? css.activeCell : css.cell}>{page+1}</div>)}
